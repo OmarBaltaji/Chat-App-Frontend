@@ -1,3 +1,38 @@
-<div class="card">
-    Home
-</div>
+<header>
+    <nav class="navbar navbar-light shadow-sm">
+        <div class="container-fluid px-5">
+            <a class="navbar-brand" routerLink="/"><h1>MatchUP</h1></a>
+            <div class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                    <h5 class="d-inline me-1">User</h5>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <!-- <li><a class="dropdown-item" routerLink="/profile">Profile</a></li> -->
+                    <!-- <li><a class="dropdown-item" (click)="logout()">Logout</a></li> -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main class="chat-page container-fluid">
+    <div class="row chat-row">
+        <div class="col-md-3 border-end border-bottom p-0">
+            <h3 class="border-bottom py-3 m-0"><span class="ps-3">Your Matches</span></h3>
+            <ul class="matches-list">
+                <li *ngFor="let match of matches" class="border-bottom">
+                    <img src="assets/images/none.png" alt="match profile picture" class="match-profile-pic me-4"> 
+                    <span>{{ match.name }}</span>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-9 bg-light d-flex flex-column justify-content-center align-items-center">
+            <h1 class="py-3">Welcome {{ userDetails.name }}</h1>
+            <div>
+                <img src="assets/images/none.png" alt="user's profile picture" class="user-profile-pic"/>
+            </div>
+            <p>Let's start a conversation!</p>
+        </div>
+    </div>
+</main>

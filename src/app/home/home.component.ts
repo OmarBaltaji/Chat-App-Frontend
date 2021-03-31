@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import Echo from 'laravel-echo';
-import { SocketsService } from '../service/sockets.service';
+import { UserService } from '../service/user.service';
 
 @Component({
   selector: 'app-home',
@@ -9,15 +9,27 @@ import { SocketsService } from '../service/sockets.service';
 })
 export class HomeComponent implements OnInit {
 
-  private echo!: Echo;
-  private laravelEchoChannel!:any;
+  userDetails!: any;
+  matches!: any; 
 
-  constructor(private socketService: SocketsService) { 
+  constructor(private userService: UserService) { 
    
   }
 
   ngOnInit(): void {
-    this.socketService.listen();
+    this.getMatchesList();
+  }
+  
+  getMatchesList() {
+    this.userService.getMatchesList().subscribe((res:any) => {
+      this.matches = res;
+    });   
+  }
+
+  getUserDetails() {
+    this.userService.getAuthUserDetails().subscribe((res:any) => {
+      this.userDetails = res;
+    });
   }
 
 }

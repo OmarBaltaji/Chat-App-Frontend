@@ -7,10 +7,13 @@ import { Routes, RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { AuthGuardService } from '../service/auth-guard.service';
+
 const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
+    canActivate: [AuthGuardService], // Route accessable for authenticated users only
   }
 ]
 
