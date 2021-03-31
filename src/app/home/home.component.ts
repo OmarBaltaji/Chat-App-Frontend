@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 
 import { AuthService } from '../service/auth.service';
 import { UserService } from '../service/user.service';
@@ -6,7 +6,6 @@ import { CookieService } from 'ngx-cookie-service';
 import { ChatService } from '../service/chat.service';
 
 import { Router } from '@angular/router';
-import { AnonymousSubject } from 'rxjs/internal/Subject';
 
 import Echo from 'laravel-echo';
 
@@ -46,6 +45,7 @@ export class HomeComponent implements OnInit {
     this.getMatchesList();
     this.getUserDetails();
     this.listenToMessage();
+    console.log(this.messages);
   }
   
   getMatchesList() {
@@ -78,7 +78,7 @@ export class HomeComponent implements OnInit {
   }
 
   messageByUser(message:any) { // See to whom the message belongs to
-    if(message.sender_id == this.userDetails.id) {
+    if(message.sender_id == this.userDetails.id && message.sender_id != message.receiver_id) {
       return 'sender-message'
     }
     return 'receiver-message'
@@ -97,10 +97,11 @@ export class HomeComponent implements OnInit {
     
     echo.channel('chat').listen('MessageSent', (e:any) => {
       this.messages.push(
-        {
-          content: e.message,
-          sender_id: this.userDetails.id,
-        }
+          {
+            content: e.message,
+            sender_id: this.userDetails.id,
+            receiver_id: Number(this.peer.id),
+          }
         );
     })
   }

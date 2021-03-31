@@ -5,7 +5,7 @@
             <div class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                 data-bs-toggle="dropdown" aria-expanded="false">
-                    <h5 class="d-inline me-1">User</h5>
+                    <h5 class="d-inline me-1">{{ userDetails.name }}</h5>
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <!-- <li><a class="dropdown-item" routerLink="/profile">Profile</a></li> -->
@@ -36,7 +36,7 @@
         </div>
         <ng-template #showPeer> <!-- Chat Board -->
             <div class="col-md-9 bg-light p-0 chat-board-col">
-                <div class="chat-body">
+                <div class="chat-body" #scrollMe [scrollTop]="scrollMe.scrollHeight">
                     <div class="d-flex justify-content-between align-items-center bg-white px-5 py-3">
                         <div>
                         </div>
@@ -54,9 +54,12 @@
                     </div>
                 </div>
                 <div class="chat-footer">
-                    <input type="text" placeholder="Type your message here" 
-                    (keyup)="onChangeMessage($event)" class="message-input" />
-                    <img src="assets/images/enter-arrow.jpg" alt="send button" class="send-icon" (click)="sendMessage(peer.id)" />
+                    <input type="text" placeholder="Type your message here" #message_input
+                    (keyup)="onChangeMessage($event)" 
+                    (keyup.enter)="message_input.value=''; sendMessage(peer.id)" 
+                    class="message-input" />
+                    <img src="assets/images/enter-arrow.jpg" alt="send button" class="send-icon" 
+                    (click)="message_input.value=''; sendMessage(peer.id)" />
                 </div>
             </div>
         </ng-template>
