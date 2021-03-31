@@ -28,30 +28,27 @@ declare global {
 })
 export class HomeComponent implements OnInit {
 
-  userDetails!: any;
+  userDetails!: {id: number, name: string};
   matches!: any; 
   peerClicked:boolean = false;
-  peer!: any;
+  peer!: {id: number, name: string };
   messages!: any;
   messageToSend!: any;
 
   constructor(
     private authService: AuthService, private cookieService: CookieService, 
-    private router: Router, private userService: UserService, private chatService: ChatService) { 
-   
-  }
+    private router: Router, private userService: UserService, private chatService: ChatService) { }
 
   ngOnInit(): void {
     this.getMatchesList();
     this.getUserDetails();
     this.listenToMessage();
-    console.log(this.messages);
+    // console.log(this.messages);
   }
   
   getMatchesList() {
     this.userService.getMatchesList().subscribe((res:any) => {
       this.matches = res;
-      console.log(this.matches)
     });   
   }
 
@@ -68,7 +65,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  selectPeer(peer:any) {
+  selectPeer(peer:{ id: number, name: string }) {
     this.peerClicked = true;
     this.peer = peer;
 
@@ -78,14 +75,17 @@ export class HomeComponent implements OnInit {
   }
 
   messageByUser(message:any) { // See to whom the message belongs to
-    if(message.sender_id == this.userDetails.id && message.sender_id != message.receiver_id) {
+    if(message.sender_id == this.userDetails.id) {
       return 'sender-message'
+    } else if(this.userDetails.id == message.receiver_id) {
+      return 'receiver-message'
+    } else {
+      return
     }
-    return 'receiver-message'
   }
 
   listenToMessage() {
-    const echo = new Echo({
+    const echo = new Echo({ // Configure Laravel Echo on the frontend
       broadcaster: 'pusher',
       cluster: 'eu',
       key: 'abec56c2e8501ee519a8',
@@ -96,11 +96,13 @@ export class HomeComponent implements OnInit {
     });
     
     echo.channel('chat').listen('MessageSent', (e:any) => {
+      console.log(this.userDetails.id);
+      console.log(this.peer.id);
       this.messages.push(
           {
             content: e.message,
             sender_id: this.userDetails.id,
-            receiver_id: Number(this.peer.id),
+            receiver_id: this.peer.id,
           }
         );
     })
@@ -110,12 +112,10 @@ export class HomeComponent implements OnInit {
     this.messageToSend = {
       content: event.target.value,
     }
-    console.log(this.messageToSend)
   }
 
   sendMessage(id:number) {
     this.chatService.sendMessage(this.messageToSend, id).subscribe((res:any) => {
-      console.log(res);
     })
   }
 }
