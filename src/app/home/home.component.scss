@@ -26,3 +26,40 @@
     width: 80px;
     height: 80px;
 }
+
+.message-input {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 75%;
+    padding: 1em;
+    border-radius: 30px;
+    outline: rgba(gray, .5) !important;
+    margin-bottom: .5em;
+}
+
+.sender-message {
+    background-color: #e6e6e6 !important;
+    align-self: flex-end;
+    text-align: right;
+    width: fit-content;
+    padding: 1em;
+    margin: 1em 1em .2em;
+    border-radius: 15px 0 15px 15px;
+}
+
+.receiver-message {
+    background-color: yellow !important;
+    align-self: flex-start;
+    width: fit-content;
+    text-align: left;
+    padding: 1em;
+    margin: 1em;
+    border-radius: 0 15px 15px 15px;
+}
+
+@media (max-width: 48em) {
+    .message-input {
+        width: 100%;
+    }
+}

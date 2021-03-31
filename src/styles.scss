@@ -6,6 +6,13 @@
     padding: 0;
 }
 
+.authentication-main { // For Login and Registartion Forms
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .user-profile-pic {
 
     width: 200px !important;

@@ -9,7 +9,7 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <!-- <li><a class="dropdown-item" routerLink="/profile">Profile</a></li> -->
-                    <!-- <li><a class="dropdown-item" (click)="logout()">Logout</a></li> -->
+                    <li><a class="dropdown-item" (click)="logout()">Logout</a></li>
                 </ul>
             </div>
         </div>
@@ -18,21 +18,43 @@
 
 <main class="chat-page container-fluid">
     <div class="row chat-row">
-        <div class="col-md-3 border-end border-bottom p-0">
+        <div class="col-md-3 border-end border-bottom p-0 matches-col">
             <h3 class="border-bottom py-3 m-0"><span class="ps-3">Your Matches</span></h3>
             <ul class="matches-list">
-                <li *ngFor="let match of matches" class="border-bottom">
+                <li *ngFor="let match of matches" class="border-bottom" (click)="selectPeer(match)">
                     <img src="assets/images/none.png" alt="match profile picture" class="match-profile-pic me-4"> 
                     <span>{{ match.name }}</span>
                 </li>
             </ul>
         </div>
-        <div class="col-md-9 bg-light d-flex flex-column justify-content-center align-items-center">
+        <div *ngIf="peerClicked == false; else showPeer" class="col-md-9 bg-light d-flex flex-column justify-content-center align-items-center"> <!-- Welcome Board -->
             <h1 class="py-3">Welcome {{ userDetails.name }}</h1>
             <div>
                 <img src="assets/images/none.png" alt="user's profile picture" class="user-profile-pic"/>
             </div>
             <p>Let's start a conversation!</p>
         </div>
+        <ng-template #showPeer> <!-- Chat Board -->
+            <div class="col-md-9 bg-light p-0 chat-board-col">
+                <div class="d-flex justify-content-between align-items-center bg-white px-5 py-3">
+                    <div>
+                    </div>
+                    <h5>{{ peer.name }}</h5>
+                    <div>
+                        <img src="assets/images/none.png" alt="user's profile picture" class="match-profile-pic"/>
+                    </div>
+                </div>
+           
+                    <div>
+                        <div *ngFor="let message of messages" class="messages-section d-flex flex-column">
+                            <div [class]="messageSender(message)" class="message-wrapper">
+                                <p>{{ message.content }}</p>
+                            </div>
+                        </div>
+                    </div>
+          
+                <input type="text" placeholder="Type your message here" class="message-input" />
+            </div>
+        </ng-template>
     </div>
 </main>

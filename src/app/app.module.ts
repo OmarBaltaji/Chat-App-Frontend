@@ -6,13 +6,11 @@ import { AppComponent } from './app.component';
 
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { RegisterComponent } from './register/register.component'
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    RegisterComponent
   ],
   imports: [
     BrowserModule,

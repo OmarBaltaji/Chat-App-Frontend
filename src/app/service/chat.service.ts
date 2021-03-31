@@ -5,9 +5,9 @@ import { CookieService } from 'ngx-cookie-service';
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class ChatService {
 
-  apiUrl: string = 'http://localhost:8000/api';
+  apiUrl = "http://localhost:8000/api";
   accessToken!:string;
   headers = new HttpHeaders();
 
@@ -18,11 +18,11 @@ export class UserService {
     this.headers = this.headers.append('Accept', 'application/json');
   }
 
-  getMatchesList() {
-    return this.http.get(this.apiUrl + '/matcheslist', { headers: this.headers });
+  getChatHistory(id:number) {
+    return this.http.get(this.apiUrl + `/message/${id}}`, { headers: this.headers });
   }
 
-  getAuthUserDetails() {
-    return this.http.get(this.apiUrl + '/user', { headers: this.headers });
+  sendMessage(id:number) {
+    return this.http.post(this.apiUrl + `/message/${id}`, { headers: this.headers });
   }
 }

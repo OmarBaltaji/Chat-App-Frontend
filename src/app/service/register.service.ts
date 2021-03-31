@@ -9,12 +9,14 @@ export class RegisterService {
 
   constructor(private http: HttpClient) { }
 
-  register(name:string, email:string, password:string, p_confirm:string) {
+  register(name:string, email:string, password:string, p_confirm:string, initial:string) {
+
     return this.http.post(this.apiUrl + '/register', {
       name: name,
       email: email,
       password: password,
-      password_confirmation: p_confirm
+      password_confirmation: p_confirm,
+      initial: initial,
     });
   }
 }
