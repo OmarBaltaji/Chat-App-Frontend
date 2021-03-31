@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import Echo from 'laravel-echo';
+import { SocketsService } from '../service/sockets.service';
 
 @Component({
   selector: 'app-home',
@@ -7,9 +9,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  private echo!: Echo;
+  private laravelEchoChannel!:any;
+
+  constructor(private socketService: SocketsService) { 
+   
+  }
 
   ngOnInit(): void {
+    this.socketService.listen();
   }
 
 }
