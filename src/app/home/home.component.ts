@@ -8,6 +8,20 @@ import { ChatService } from '../service/chat.service';
 import { Router } from '@angular/router';
 import { AnonymousSubject } from 'rxjs/internal/Subject';
 
+import Echo from 'laravel-echo';
+
+declare var require: any
+(window as any).global = window;
+
+window.Pusher = require('pusher-js');
+
+declare global {
+
+  interface Window {
+    Pusher: any;
+  }
+}
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -20,6 +34,7 @@ export class HomeComponent implements OnInit {
   peerClicked:boolean = false;
   peer!: any;
   messages!: any;
+  messageToSend!: any;
 
   constructor(
     private authService: AuthService, private cookieService: CookieService, 
@@ -30,6 +45,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.getMatchesList();
     this.getUserDetails();
+    this.listenToMessage();
   }
   
   getMatchesList() {
@@ -56,16 +72,49 @@ export class HomeComponent implements OnInit {
     this.peerClicked = true;
     this.peer = peer;
 
-    this.chatService.getChatHistory(peer.id).subscribe((res:any) => {
-      console.log(res);
+    this.chatService.getChatHistory(peer.id).subscribe((res:any) => { // Get chat history between users
       this.messages = res;
     });
   }
 
-  messageSender(message:any) {
+  messageByUser(message:any) { // See to whom the message belongs to
     if(message.sender_id == this.userDetails.id) {
       return 'sender-message'
     }
     return 'receiver-message'
+  }
+
+  listenToMessage() {
+    const echo = new Echo({
+      broadcaster: 'pusher',
+      cluster: 'eu',
+      key: 'abec56c2e8501ee519a8',
+      wsHost: window.location.hostname,
+      wsPort: 6001,
+      disableStats: true,
+      enabledTransports: ['ws'],
+    });
+    
+    echo.channel('chat').listen('MessageSent', (e:any) => {
+      this.messages.push(
+        {
+          content: e.message,
+          sender_id: this.userDetails.id,
+        }
+        );
+    })
+  }
+
+  onChangeMessage(event:any) {
+    this.messageToSend = {
+      content: event.target.value,
+    }
+    console.log(this.messageToSend)
+  }
+
+  sendMessage(id:number) {
+    this.chatService.sendMessage(this.messageToSend, id).subscribe((res:any) => {
+      console.log(res);
+    })
   }
 }

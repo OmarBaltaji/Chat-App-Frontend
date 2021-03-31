@@ -36,24 +36,28 @@
         </div>
         <ng-template #showPeer> <!-- Chat Board -->
             <div class="col-md-9 bg-light p-0 chat-board-col">
-                <div class="d-flex justify-content-between align-items-center bg-white px-5 py-3">
-                    <div>
+                <div class="chat-body">
+                    <div class="d-flex justify-content-between align-items-center bg-white px-5 py-3">
+                        <div>
+                        </div>
+                        <h5>{{ peer.name }}</h5>
+                        <div>
+                            <img src="assets/images/none.png" alt="user's profile picture" class="match-profile-pic"/>
+                        </div>
                     </div>
-                    <h5>{{ peer.name }}</h5>
-                    <div>
-                        <img src="assets/images/none.png" alt="user's profile picture" class="match-profile-pic"/>
-                    </div>
-                </div>
-           
                     <div>
                         <div *ngFor="let message of messages" class="messages-section d-flex flex-column">
-                            <div [class]="messageSender(message)" class="message-wrapper">
+                            <div [class]="messageByUser(message)" class="message-wrapper">
                                 <p>{{ message.content }}</p>
                             </div>
                         </div>
                     </div>
-          
-                <input type="text" placeholder="Type your message here" class="message-input" />
+                </div>
+                <div class="chat-footer">
+                    <input type="text" placeholder="Type your message here" 
+                    (keyup)="onChangeMessage($event)" class="message-input" />
+                    <img src="assets/images/enter-arrow.jpg" alt="send button" class="send-icon" (click)="sendMessage(peer.id)" />
+                </div>
             </div>
         </ng-template>
     </div>

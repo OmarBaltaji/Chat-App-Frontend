@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
+import {} from '@angular'
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,7 @@ export class ChatService {
     return this.http.get(this.apiUrl + `/message/${id}}`, { headers: this.headers });
   }
 
-  sendMessage(id:number) {
-    return this.http.post(this.apiUrl + `/message/${id}`, { headers: this.headers });
+  sendMessage(message:any, id:number) {
+    return this.http.post(this.apiUrl + `/message/${id}`, message, { headers: this.headers });
   }
 }
